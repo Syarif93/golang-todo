@@ -1,30 +1,14 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-
 	"todo/config"
 	"todo/models"
+	"todo/routes"
 
-	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 var db *gorm.DB = config.Connect()
-
-func getTodos(context *gin.Context) {
-	var todos []models.Todo
-	result := db.Find(&todos)
-	fmt.Sprintln(result)
-	if result != nil {
-		context.JSON(http.StatusNotFound, gin.H{"todos": "Empty"})
-		return
-	} else {
-		context.JSON(http.StatusOK, gin.H{"todos": result})
-		return
-	}
-}
 
 // func addTodo(context *gin.Context) {
 // 	var newTodo Todo
@@ -74,11 +58,10 @@ func getTodos(context *gin.Context) {
 
 func main() {
 	defer config.Disconnect(db)
+
 	db.AutoMigrate(&models.Todo{})
-	router := gin.Default()
-	router.GET("/todos", getTodos)
-	// router.GET("/todo/:id", getTodo)
-	// router.PUT("/todo/:id/toggle-status", toggleTodoStatus)
-	// router.POST("/todo", addTodo)
-	router.Run(":9000")
+
+	router := routes.Router()
+
+	router.Run()
 }
