@@ -19,7 +19,7 @@ func ApiRoutes(router *gin.Engine) *gin.RouterGroup {
 
 		apiRoutes.GET("/todos", todoController().GetTodos)
 		apiRoutes.POST("/todo", todoController().CreateTodo)
-		// router.GET("/todo/:id", getTodo)
+		apiRoutes.GET("/todo/:id", todoController().GetOneTodo)
 		// router.PUT("/todo/:id/toggle-status", toggleTodoStatus)
 	}
 
